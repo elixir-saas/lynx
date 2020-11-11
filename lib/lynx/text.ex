@@ -11,11 +11,11 @@ defmodule Lynx.Text do
 
   ## Examples
 
-    iex> Lynx.Text.extract_links("link to www.example.com!")
-    ["http://www.example.com"]
+      iex> Lynx.Text.extract_links("link to www.example.com!")
+      ["http://www.example.com"]
 
-    iex> Lynx.Text.extract_links("link to www.example.com and test.com/some/path")
-    ["http://www.example.com", "http://test.com/some/path"]
+      iex> Lynx.Text.extract_links("link to www.example.com and test.com/some/path")
+      ["http://www.example.com", "http://test.com/some/path"]
 
   """
   def extract_links(text) when is_binary(text) do
@@ -34,11 +34,11 @@ defmodule Lynx.Text do
 
   ## Examples
 
-    iex> Lynx.Text.parse_links("link to www.example.com!")
-    ["link to ", {:link, "www.example.com"}, "!"]
+      iex> Lynx.Text.parse_links("link to www.example.com!")
+      ["link to ", {:link, "www.example.com"}, "!"]
 
-    iex> Lynx.Text.parse_links("link to www.example.com and test.com/some/path")
-    ["link to ", {:link, "www.example.com"}, " and ", {:link, "test.com/some/path"}]
+      iex> Lynx.Text.parse_links("link to www.example.com and test.com/some/path")
+      ["link to ", {:link, "www.example.com"}, " and ", {:link, "test.com/some/path"}]
 
   """
   def parse_links(text) when is_binary(text), do: do_parse(text, [])
@@ -70,6 +70,21 @@ defmodule Lynx.Text do
     {before, link, rest}
   end
 
+  @doc """
+  Adds the scheme to a link if missing.
+
+  ## Examples
+
+      iex> Lynx.Text.format_link("example.com")
+      "http://example.com"
+
+      iex> Lynx.Text.format_link("http://example.com")
+      "http://example.com"
+
+      iex> Lynx.Text.format_link("https://example.com")
+      "https://example.com"
+
+  """
   def format_link(link = "http://" <> _), do: link
   def format_link(link = "https://" <> _), do: link
   def format_link(link), do: "http://" <> link

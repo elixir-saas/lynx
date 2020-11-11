@@ -1,4 +1,9 @@
 defmodule Lynx.HTML do
+  @moduledoc """
+  Utility functions for embedding links in HTML.
+
+  """
+
   import Phoenix.HTML.Tag, only: [content_tag: 3]
   import Lynx.Text, only: [parse_links: 1, format_link: 1]
 
@@ -16,8 +21,8 @@ defmodule Lynx.HTML do
   exit links, which take the user through a backend redirect before leaving
   your site:
 
-    linkify_text "link to example.com",
-      process_href: & Routes.page_path(@conn, :exit, url: &1)
+      linkify_text "link to example.com",
+        process_href: & Routes.page_path(@conn, :exit, url: &1)
 
   """
   def linkify_text(text, opts \\ []) when is_binary(text) do
