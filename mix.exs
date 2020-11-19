@@ -20,6 +20,7 @@ defmodule Lynx.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
+      {:phoenix, "~> 1.5", only: :dev, runtime: false},
       {:phoenix_html, "~> 2.0"}
     ]
   end
