@@ -5,8 +5,8 @@ defmodule Lynx do
   """
 
   def fetch_config!(key, opts) do
-    with :error <- Application.fetch_env(:lynx, key),
-         :error <- Keyword.fetch(opts, key) do
+    with :error <- Keyword.fetch(opts, key),
+         :error <- Application.fetch_env(:lynx, key) do
       raise "Lynx is missing a config value: #{inspect key}"
     else
       {:ok, value} -> value
