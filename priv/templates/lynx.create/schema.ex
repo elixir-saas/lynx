@@ -30,6 +30,8 @@ defmodule <%= inspect schema.module %> do
     <%= schema.singular %>
     |> cast(attrs, [:page_title, :page_description, :page_site_name, :page_url, :page_icon_url, :page_image_url])
     |> update_change(:page_description, &limit_string(&1, 255, ellipsis: true))
+    # <%= schema.human_plural %> that fail changeset validation will automatically be removed
+    # |> validate_required([:page_title, :page_description, :page_image_url])
     |> put_change(:state, :done)
   end
 
