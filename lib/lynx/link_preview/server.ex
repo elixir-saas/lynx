@@ -35,11 +35,9 @@ defmodule Lynx.LinkPreview.Server do
 
   @impl true
   def handle_cast({:links, links, resource}, state = %{context_module: context}) do
-    link_previews = context.list_link_previews(resource)
+    existing_links = context.list_link_previews(resource) |> Enum.map(& &1.link)
 
-    existing_links = Enum.map(link_previews, & &1.link)
-    removable_links = existing_links -- links
-    new_links = links -- existing_links
+    {new_links, removable_links} = Lynx.LinkPreview.diff_links(existing_links, links)
 
     Logger.info("Processing links, #{length existing_links} existing, #{length removable_links} to remove, #{length new_links} to add")
 
