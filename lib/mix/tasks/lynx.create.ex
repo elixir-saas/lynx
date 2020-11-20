@@ -57,6 +57,7 @@ defmodule Mix.Tasks.Lynx.Create do
     Map.new()
     |> Map.put(:module, Module.concat([schema.module, PubSub]))
     |> Map.put(:alias, Module.concat([schema.alias, PubSub]))
+    |> Map.put(:subscribe, "subscribe_#{schema.singular}")
     |> Map.put(:broadcast, "broadcast_#{schema.singular}")
     |> Map.put(:ctx_pub_sub, ctx_pub_sub)
   end

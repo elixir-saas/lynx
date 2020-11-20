@@ -28,7 +28,7 @@ defmodule <%= inspect schema.module %> do
 
   def loaded_changeset(<%= schema.singular %>, attrs) do
     <%= schema.singular %>
-    |> cast(attrs, [:page_title, :page_description, :page_site_name, :page_page_url, :page_icon_url, :page_image_url])
+    |> cast(attrs, [:page_title, :page_description, :page_site_name, :page_url, :page_icon_url, :page_image_url])
     |> update_change(:page_description, &limit_string(&1, 255, ellipsis: true))
     |> put_change(:state, :done)
   end
