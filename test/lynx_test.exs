@@ -32,12 +32,12 @@ defmodule LynxTest do
     end
 
     test "processes the link href" do
-      assert Lynx.HTML.linkify_text("www.example.com", process_href: & "#{&1}#anchor")
+      assert Lynx.HTML.linkify_text("www.example.com", process_href: & "#{elem(&1, 1)}#anchor")
         == [{:safe, [?<, "a", [[?\s, "href", ?=, ?", "http://www.example.com#anchor", ?"]], ?>, "www.example.com", ?<, ?/, "a", ?>]}]
     end
 
     test "processes the link text" do
-      assert Lynx.HTML.linkify_text("www.example.com", process_text: & "(#{&1})")
+      assert Lynx.HTML.linkify_text("www.example.com", process_text: & "(#{elem(&1, 1)})")
         == [{:safe, [?<, "a", [[?\s, "href", ?=, ?", "http://www.example.com", ?"]], ?>, "(www.example.com)", ?<, ?/, "a", ?>]}]
     end
   end

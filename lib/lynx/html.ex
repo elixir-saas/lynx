@@ -5,7 +5,8 @@ defmodule Lynx.HTML do
   """
 
   import Phoenix.HTML.Tag, only: [content_tag: 3]
-  import Lynx.Text, only: [parse_links: 1, format_link: 1]
+  import Lynx, only: [get_config: 3]
+  import Lynx.Text, only: [parse: 2]
 
   @doc """
   Parses links from a binary and changes them to anchor tags. Returns iodata,
@@ -26,14 +27,20 @@ defmodule Lynx.HTML do
 
   """
   def linkify_text(text, opts \\ []) when is_binary(text) do
-    link_attrs = Keyword.get(opts, :link_attrs, [])
-    process_href = Keyword.get(opts, :process_href, & &1)
-    process_text = Keyword.get(opts, :process_text, & &1)
+    formatter = get_config(:formatter, opts, Lynx.Formatter)
 
-    Enum.map parse_links(text), fn
-      {:link, link} ->
-        attrs = Keyword.put(link_attrs, :href, process_href.(format_link(link)))
-        content_tag :a, attrs, do: process_text.(link)
+    link_attrs = Keyword.get(opts, :link_attrs, [])
+    process_href = Keyword.get(opts, :process_href, & elem(&1, 1))
+    process_text = Keyword.get(opts, :process_text, & elem(&1, 1))
+
+    Enum.map parse(text, opts), fn
+      {type, _value} = elem ->
+        formatted_href = formatter.format(elem)
+        processed_href = process_href.({type, formatted_href})
+
+        attrs = Keyword.put(link_attrs, :href, processed_href)
+
+        content_tag :a, attrs, do: process_text.(elem)
 
       text ->
         text

@@ -6,6 +6,7 @@ defmodule Lynx.MixProject do
       app: :lynx,
       version: "0.1.0",
       elixir: "~> 1.11",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -26,4 +27,7 @@ defmodule Lynx.MixProject do
       {:phoenix_html, "~> 2.0"}
     ]
   end
+
+  def elixirc_paths(:test), do: ["test/helpers" | elixirc_paths(:prod)]
+  def elixirc_paths(_), do: ["lib"]
 end

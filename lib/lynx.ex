@@ -4,6 +4,11 @@ defmodule Lynx do
 
   """
 
+  def get_config(key, opts, default \\ nil) do
+    Keyword.get(opts, key) ||
+      Application.get_env(:lynx, key, default)
+  end
+
   def fetch_config!(key, opts) do
     with :error <- Keyword.fetch(opts, key),
          :error <- Application.fetch_env(:lynx, key) do
