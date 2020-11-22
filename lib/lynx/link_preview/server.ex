@@ -39,7 +39,7 @@ defmodule Lynx.LinkPreview.Server do
 
     {new_links, removable_links} = Lynx.LinkPreview.diff_links(existing_links, links)
 
-    Logger.info("Processing links, #{length existing_links} existing, #{length removable_links} to remove, #{length new_links} to add")
+    Logger.debug("Processing links, #{length existing_links} existing, #{length removable_links} to remove, #{length new_links} to add")
 
     if not Enum.empty?(removable_links) do
       context.delete_link_previews(resource, links: removable_links)
@@ -80,7 +80,7 @@ defmodule Lynx.LinkPreview.Server do
             Logger.info("Persisted article data for link preview #{inspect link_preview}")
 
           {:error, reason} ->
-            Logger.info("Failed to persist article data for link preview #{inspect link_preview}, reason: #{inspect reason}")
+            Logger.warn("Failed to persist article data for link preview #{inspect link_preview}, reason: #{inspect reason}")
             context.delete_link_preview(link_preview)
         end
     end

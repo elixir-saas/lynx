@@ -1,8 +1,11 @@
 defmodule Lynx.LinkPreview.OpenGraphClient do
   use HTTPoison.Base
 
+  @behaviour Lynx.LinkPreview.Client
+
   @default_opts [recv_timeout: 15_000, follow_redirect: true]
 
+  @impl true
   def get_link_preview(url) do
     get(url)
     |> handle_response()
