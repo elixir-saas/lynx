@@ -8,6 +8,8 @@ defmodule Lynx.MixProject do
       elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
     ]
   end
@@ -26,6 +28,19 @@ defmodule Lynx.MixProject do
       {:floki, "~> 0.29"},
       {:jason, "~> 1.2"},
       {:phoenix_html, "~> 2.0"}
+    ]
+  end
+
+  defp description() do
+    "Rich application linking features"
+  end
+
+  defp package() do
+    [
+      name: :lynx,
+      organization: :equip,
+      licenses: ["Apache-2.0"],
+      links: %{}
     ]
   end
 
