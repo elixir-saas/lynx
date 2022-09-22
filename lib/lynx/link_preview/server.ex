@@ -14,9 +14,10 @@ defmodule Lynx.LinkPreview.Server do
   end
 
   def submit_resource(resource = %_Schema{}, opts) do
-    links = resource
-    |> Map.fetch!(Keyword.get(opts, :field, :text))
-    |> Lynx.Text.extract_links()
+    links =
+      resource
+      |> Map.fetch!(Keyword.get(opts, :field, :text))
+      |> Lynx.Text.extract_links()
 
     GenServer.cast(__MODULE__, {:links, links, resource})
     resource
@@ -26,11 +27,12 @@ defmodule Lynx.LinkPreview.Server do
 
   @impl true
   def init(opts) do
-    {:ok, %{
-      context_module: Lynx.fetch_config!(:context_module, opts),
-      client_strategy: Lynx.fetch_config!(:client, :strategy, opts),
-      tasks: []
-    }}
+    {:ok,
+     %{
+       context_module: Lynx.fetch_config!(:context_module, opts),
+       client_strategy: Lynx.fetch_config!(:client, :strategy, opts),
+       tasks: []
+     }}
   end
 
   @impl true
@@ -39,23 +41,26 @@ defmodule Lynx.LinkPreview.Server do
 
     {new_links, removable_links} = Lynx.LinkPreview.diff_links(existing_links, links)
 
-    Logger.debug("Processing links, #{length existing_links} existing, #{length removable_links} to remove, #{length new_links} to add")
+    Logger.debug(
+      "Processing links, #{length(existing_links)} existing, #{length(removable_links)} to remove, #{length(new_links)} to add"
+    )
 
     if not Enum.empty?(removable_links) do
       context.delete_link_previews(resource, links: removable_links)
     end
 
-    tasks = Enum.flat_map new_links, fn link ->
-      case context.create_link_preview(link, resource) do
-        {:ok, link_preview} ->
-          Logger.debug("Created link preview: #{inspect link_preview}")
-          [Task.async(__MODULE__, :fetch_link_preview_telemetry, [link_preview, state])]
+    tasks =
+      Enum.flat_map(new_links, fn link ->
+        case context.create_link_preview(link, resource) do
+          {:ok, link_preview} ->
+            Logger.debug("Created link preview: #{inspect(link_preview)}")
+            [Task.async(__MODULE__, :fetch_link_preview_telemetry, [link_preview, state])]
 
-        {:error, reason} ->
-          Logger.error("Error while creating link preview: #{inspect reason}")
-          []
-      end
-    end
+          {:error, reason} ->
+            Logger.error("Error while creating link preview: #{inspect(reason)}")
+            []
+        end
+      end)
 
     {:noreply, %{state | tasks: state.tasks ++ tasks}}
   end
@@ -71,30 +76,34 @@ defmodule Lynx.LinkPreview.Server do
   def fetch_link_preview(link_preview, %{context_module: context, client_strategy: client}) do
     case client.get_link_preview(link_preview.link) do
       nil ->
-        Logger.warn("Failed to look up article data for link preview #{inspect link_preview}")
+        Logger.warn("Failed to look up article data for link preview #{inspect(link_preview)}")
         context.update_link_preview_failed(link_preview)
 
       link_details ->
         case context.update_link_preview_loaded(link_preview, link_details) do
           {:ok, link_preview} ->
-            Logger.info("Persisted article data for link preview #{inspect link_preview}")
+            Logger.info("Persisted article data for link preview #{inspect(link_preview)}")
 
           {:error, reason} ->
-            Logger.warn("Failed to persist article data for link preview #{inspect link_preview}, reason: #{inspect reason}")
+            Logger.warn(
+              "Failed to persist article data for link preview #{inspect(link_preview)}, reason: #{inspect(reason)}"
+            )
+
             context.delete_link_preview(link_preview)
         end
     end
+
     :processed
   end
 
   @impl true
   def handle_info({ref, :processed}, state) when is_reference(ref) do
-    {:noreply, %{state | tasks: Enum.reject(state.tasks, & &1.ref == ref)}}
+    {:noreply, %{state | tasks: Enum.reject(state.tasks, &(&1.ref == ref))}}
   end
 
   @impl true
   def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
-    {:noreply, %{state | tasks: Enum.reject(state.tasks, & &1.ref == ref)}}
+    {:noreply, %{state | tasks: Enum.reject(state.tasks, &(&1.ref == ref))}}
   end
 
   @impl true

@@ -4,5 +4,5 @@ defmodule Lynx.LinkPreview.Client do
   fields to be cast into a chnageset.
 
   """
-  @callback get_link_preview(String.t) :: {:ok, term} | {:error, term}
+  @callback get_link_preview(String.t()) :: {:ok, term} | {:error, term}
 end

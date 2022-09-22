@@ -30,20 +30,20 @@ defmodule Lynx.HTML do
     formatter = get_config(:formatter, opts, Lynx.Formatter)
 
     link_attrs = Keyword.get(opts, :link_attrs, [])
-    process_href = Keyword.get(opts, :process_href, & elem(&1, 1))
-    process_text = Keyword.get(opts, :process_text, & elem(&1, 1))
+    process_href = Keyword.get(opts, :process_href, &elem(&1, 1))
+    process_text = Keyword.get(opts, :process_text, &elem(&1, 1))
 
-    Enum.map parse(text, opts), fn
+    Enum.map(parse(text, opts), fn
       {type, _value} = elem ->
         formatted_href = formatter.format(elem)
         processed_href = process_href.({type, formatted_href})
 
         attrs = Keyword.put(link_attrs, :href, processed_href)
 
-        content_tag :a, attrs, do: process_text.(elem)
+        content_tag(:a, attrs, do: process_text.(elem))
 
       text ->
         text
-    end
+    end)
   end
 end

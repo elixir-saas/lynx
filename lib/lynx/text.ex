@@ -12,13 +12,14 @@ defmodule Lynx.Text do
   def extract(text, opts \\ []) when is_binary(text) do
     formatter = get_config(:formatter, opts, Lynx.Formatter)
 
-    extracted = Enum.flat_map parse(text, opts), fn
-      {type, _} = elem ->
-        [{type, formatter.format(elem)}]
+    extracted =
+      Enum.flat_map(parse(text, opts), fn
+        {type, _} = elem ->
+          [{type, formatter.format(elem)}]
 
-      _otherwise ->
-        []
-    end
+        _otherwise ->
+          []
+      end)
 
     Enum.group_by(extracted, &elem(&1, 0), &elem(&1, 1))
   end
@@ -40,13 +41,13 @@ defmodule Lynx.Text do
 
   @doc false
   defp do_extract({type, _} = strategy, text, acc) do
-    Enum.flat_map do_parse(strategy, text, acc), fn
+    Enum.flat_map(do_parse(strategy, text, acc), fn
       {^type, _} = elem ->
         [Formatter.format(elem)]
 
       _otherwise ->
         []
-    end
+    end)
   end
 
   @doc """
@@ -68,15 +69,15 @@ defmodule Lynx.Text do
   def parse(text, opts \\ []) when is_binary(text) do
     parser = get_config(:parser, opts, Lynx.Parser)
 
-    Enum.reduce parser.strategies(), [text], fn strategy, acc ->
-      Enum.flat_map acc, fn
+    Enum.reduce(parser.strategies(), [text], fn strategy, acc ->
+      Enum.flat_map(acc, fn
         {_, _} = elem ->
           [elem]
 
         unparsed_text ->
           do_parse(strategy, unparsed_text, [])
-      end
-    end
+      end)
+    end)
   end
 
   @doc """

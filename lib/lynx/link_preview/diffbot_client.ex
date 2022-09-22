@@ -9,11 +9,12 @@ defmodule Lynx.LinkPreview.DiffbotClient do
 
   @impl true
   def get_link_preview(url) do
-    query = URI.encode_query %{
-      url: url,
-      token: Lynx.fetch_config!(:client, :api_token, []),
-      fields: Enum.join(@article_fields, ",")
-    }
+    query =
+      URI.encode_query(%{
+        url: url,
+        token: Lynx.fetch_config!(:client, :api_token, []),
+        fields: Enum.join(@article_fields, ",")
+      })
 
     get("/article?" <> query)
     |> handle_response()
@@ -40,11 +41,17 @@ defmodule Lynx.LinkPreview.DiffbotClient do
   def get_result_image(result) do
     result
     |> Map.get("images", [])
-    |> Enum.find_value(& &1["primary"] && &1["url"])
+    |> Enum.find_value(&(&1["primary"] && &1["url"]))
   end
 
-  def handle_response({:ok, %HTTPoison.Response{body: %{"objects" => objects}, status_code: 200}}), do: {:ok, objects}
-  def handle_response({:ok, %HTTPoison.Response{body: %{"error" => _error}, status_code: 200}}), do: {:error, :target_site_error}
+  def handle_response(
+        {:ok, %HTTPoison.Response{body: %{"objects" => objects}, status_code: 200}}
+      ),
+      do: {:ok, objects}
+
+  def handle_response({:ok, %HTTPoison.Response{body: %{"error" => _error}, status_code: 200}}),
+    do: {:error, :target_site_error}
+
   def handle_response({:ok, %HTTPoison.Response{}}), do: {:error, :api_server_error}
   def handle_response({:error, %HTTPoison.Error{reason: :timeout}}), do: {:error, :timeout}
 

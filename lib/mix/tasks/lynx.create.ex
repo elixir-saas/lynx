@@ -14,7 +14,7 @@ defmodule Mix.Tasks.Lynx.Create do
     table: :string,
     schema_name: :string,
     pub_sub: :string,
-    binary_id: :boolean,
+    binary_id: :boolean
   ]
 
   @impl true
@@ -30,8 +30,10 @@ defmodule Mix.Tasks.Lynx.Create do
         |> Phx.Gen.Context.print_shell_instructions()
 
       {_, _} ->
-        Mix.raise "expected lynx.create to receive the context name" <>
-          "got: #{inspect Enum.join(args, " ")}"
+        Mix.raise(
+          "expected lynx.create to receive the context name" <>
+            "got: #{inspect(Enum.join(args, " "))}"
+        )
     end
   end
 
@@ -71,28 +73,44 @@ defmodule Mix.Tasks.Lynx.Create do
   end
 
   defp schema_copy_new_files(%Schema{context_app: ctx_app} = schema, binding) do
-    Mix.Phoenix.copy_from generator_paths(), "priv/templates/lynx.create", binding, [
+    Mix.Phoenix.copy_from(generator_paths(), "priv/templates/lynx.create", binding, [
       {:eex, "schema.ex", schema.file}
-    ]
+    ])
 
     if schema.migration? do
-      migration_path = Mix.Phoenix.context_app_path(ctx_app, "priv/repo/migrations/#{timestamp()}_create_#{schema.table}.exs")
-      Mix.Phoenix.copy_from generator_paths(), "priv/templates/lynx.create", binding, [
-        {:eex, "migration.exs", migration_path},
-      ]
+      migration_path =
+        Mix.Phoenix.context_app_path(
+          ctx_app,
+          "priv/repo/migrations/#{timestamp()}_create_#{schema.table}.exs"
+        )
+
+      Mix.Phoenix.copy_from(generator_paths(), "priv/templates/lynx.create", binding, [
+        {:eex, "migration.exs", migration_path}
+      ])
     end
   end
 
   defp pub_sub_copy_new_files(%Schema{context_app: ctx_app}, schema_module, binding) do
-    file = Mix.Phoenix.context_lib_path(ctx_app, Phoenix.Naming.underscore(schema_module) <> "_pub_sub.ex")
-    Mix.Phoenix.copy_from generator_paths(), "priv/templates/lynx.create", binding, [
-      {:eex, "pub_sub.ex", file},
-    ]
+    file =
+      Mix.Phoenix.context_lib_path(
+        ctx_app,
+        Phoenix.Naming.underscore(schema_module) <> "_pub_sub.ex"
+      )
+
+    Mix.Phoenix.copy_from(generator_paths(), "priv/templates/lynx.create", binding, [
+      {:eex, "pub_sub.ex", file}
+    ])
   end
 
   defp inject_schema_access(%Context{file: file} = context, binding) do
     unless Context.pre_existing?(context) do
-      template = Mix.Phoenix.eval_from(Mix.Phoenix.generator_paths(), "priv/templates/phx.gen.context/context.ex", binding)
+      template =
+        Mix.Phoenix.eval_from(
+          Mix.Phoenix.generator_paths(),
+          "priv/templates/phx.gen.context/context.ex",
+          binding
+        )
+
       Mix.Generator.create_file(file, template)
     end
 
@@ -128,6 +146,6 @@ defmodule Mix.Tasks.Lynx.Create do
     "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
   end
 
-  defp pad(i) when i < 10, do: << ?0, ?0 + i >>
+  defp pad(i) when i < 10, do: <<?0, ?0 + i>>
   defp pad(i), do: to_string(i)
 end

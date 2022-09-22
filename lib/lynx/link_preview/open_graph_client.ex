@@ -35,7 +35,9 @@ defmodule Lynx.LinkPreview.OpenGraphClient do
     |> Enum.at(0, nil)
   end
 
-  defp handle_response({:ok, %HTTPoison.Response{body: document, status_code: 200}}), do: {:ok, document}
+  defp handle_response({:ok, %HTTPoison.Response{body: document, status_code: 200}}),
+    do: {:ok, document}
+
   defp handle_response({:ok, %HTTPoison.Response{}}), do: {:error, :target_site_error}
   defp handle_response({:error, %HTTPoison.Error{reason: :timeout}}), do: {:error, :timeout}
 
