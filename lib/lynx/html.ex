@@ -4,7 +4,7 @@ defmodule Lynx.HTML do
 
   """
 
-  import Phoenix.HTML.Tag, only: [content_tag: 3]
+  import PhoenixHTMLHelpers.Tag, only: [content_tag: 3]
   import Lynx, only: [get_config: 3]
   import Lynx.Text, only: [parse: 2]
 
