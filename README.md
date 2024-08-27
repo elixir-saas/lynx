@@ -2,12 +2,13 @@
 
 # Lynx
 
-**TODO: Add description**
+Lynx is an Elixir library for extracting, analyzing, and formatting links.
+It supports link detection from text and link unfurling, using the included OpenGraph client for scraping.
+Generate migration, schema, and context files to easily add Lynx to your project.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `lynx` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `lynx` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -17,7 +18,6 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/lynx](https://hexdocs.pm/lynx).
+Read the docs at [https://hexdocs.pm/lynx](https://hexdocs.pm/lynx).
 
+Once installed, run `lynx.create` to perform code generation for using `Lynx.LinkPreview` in your project.
