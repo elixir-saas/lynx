@@ -28,7 +28,7 @@ defmodule Lynx.MixProject do
       {:floki, ">= 0.30.0"},
       {:httpoison, "~> 2.2"},
       {:jason, "~> 1.2"},
-      {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix, "~> 1.7", runtime: false},
       {:phoenix_html_helpers, "~> 1.0"}
     ]
   end
