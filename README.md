@@ -13,11 +13,11 @@ The package can be installed by adding `lynx` to your list of dependencies in `m
 ```elixir
 def deps do
   [
-    {:lynx, "~> 0.1.0"}
+    {:lynx, git: "git@github.com:elixir-saas/lynx.git", tag: "v0.1.1"}
   ]
 end
 ```
 
-Read the docs at [https://hexdocs.pm/lynx](https://hexdocs.pm/lynx).
+Read the docs at [elixir-saas/lynx](https://github.com/elixir-saas/lynx).
 
 Once installed, run `lynx.create` to perform code generation for using `Lynx.LinkPreview` in your project.
