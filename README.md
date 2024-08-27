@@ -1,3 +1,5 @@
+![Lynx Logo](./priv/static/images/logo-on-transparent.png)
+
 # Lynx
 
 **TODO: Add description**
