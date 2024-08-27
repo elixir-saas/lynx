@@ -5,7 +5,7 @@ defmodule Lynx.MixProject do
     [
       app: :lynx,
       version: "0.2.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -22,12 +22,12 @@ defmodule Lynx.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.28", only: :dev, runtime: false},
-      {:phoenix, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:httpoison, "~> 1.8"},
-      {:floki, "~> 0.33"},
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:floki, "~> 0.36"},
+      {:httpoison, "~> 2.2"},
       {:jason, "~> 1.4"},
-      {:phoenix_html, "~> 3.2"}
+      {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix_html, "~> 3.3"}
     ]
   end
 
@@ -38,7 +38,6 @@ defmodule Lynx.MixProject do
   defp package() do
     [
       name: :lynx,
-      organization: :equip,
       licenses: ["Apache-2.0"],
       links: %{}
     ]

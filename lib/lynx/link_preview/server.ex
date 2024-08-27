@@ -76,7 +76,7 @@ defmodule Lynx.LinkPreview.Server do
   def fetch_link_preview(link_preview, %{context_module: context, client_strategy: client}) do
     case client.get_link_preview(link_preview.link) do
       nil ->
-        Logger.warn("Failed to look up article data for link preview #{inspect(link_preview)}")
+        Logger.warning("Failed to look up article data for link preview #{inspect(link_preview)}")
         context.update_link_preview_failed(link_preview)
 
       link_details ->
@@ -85,7 +85,7 @@ defmodule Lynx.LinkPreview.Server do
             Logger.info("Persisted article data for link preview #{inspect(link_preview)}")
 
           {:error, reason} ->
-            Logger.warn(
+            Logger.warning(
               "Failed to persist article data for link preview #{inspect(link_preview)}, reason: #{inspect(reason)}"
             )
 
