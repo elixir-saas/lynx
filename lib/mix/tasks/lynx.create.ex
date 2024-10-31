@@ -31,8 +31,7 @@ defmodule Mix.Tasks.Lynx.Create do
 
       {_, _} ->
         Mix.raise(
-          "expected lynx.create to receive the context name" <>
-            "got: #{inspect(Enum.join(args, " "))}"
+          "expected lynx.create to receive the context name, got: #{inspect(Enum.join(args, " "))}"
         )
     end
   end
