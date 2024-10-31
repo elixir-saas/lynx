@@ -13,7 +13,7 @@ The package can be installed by adding `lynx` to your list of dependencies in `m
 ```elixir
 def deps do
   [
-    {:lynx, git: "git@github.com:elixir-saas/lynx.git", tag: "v0.1.2"}
+    {:lynx, git: "git@github.com:elixir-saas/lynx.git", tag: "v0.1.3"}
   ]
 end
 ```
